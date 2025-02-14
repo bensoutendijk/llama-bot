@@ -14,6 +14,8 @@ services:
   bot:
     build: 
       dockerfile: docker/bot.dockerfile
+    environment:
+      - TAVERN_BOT_TOKEN=$TAVERN_BOT_TOKEN
     volumes:
       - ./bot:/app
 
@@ -22,6 +24,13 @@ services:
       dockerfile: docker/api.dockerfile
     ports:
       - "5000:8080"
+    environment:
+      TAVERN_HOSTNAME: $TAVERN_HOSTNAME
+      DISCORD_CLIENT_ID: $DISCORD_CLIENT_ID
+      DISCORD_CLIENT_SECRET: $DISCORD_CLIENT_SECRET
+      DISCORD_REDIRECT_URI: $DISCORD_REDIRECT_URI
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}
+      JWT_SECRET: $JWT_SECRET
     volumes:
       - ./api/src:/app/src
 
@@ -48,10 +57,10 @@ services:
       - ./admin:/app
       - ./db/migrations:/db/migrations
     environment:
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
     working_dir: /app
     entrypoint: ["python"]
 

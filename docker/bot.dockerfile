@@ -2,9 +2,9 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY bot/requirements.txt .
+COPY ./bot/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY ./bot/ ./
 
-CMD ["python", "main.py"]
+CMD ["python", "watcher.py"]

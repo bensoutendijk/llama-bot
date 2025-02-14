@@ -1,15 +1,17 @@
 import os
+
 from discord import Message
 from discord.ext import commands
 from openai import OpenAI
+
 from bot.patron import Patron
-from chat import Chat
 
 
 class Tavern(commands.Cog, name="tavern"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+        print("Creating LLM client...")
         self.client = OpenAI(
             base_url=f"{os.getenv('TAVERN_OPENAI_BASE')}/v1",
             api_key=os.getenv("TAVERN_OPENAI_API_KEY"),

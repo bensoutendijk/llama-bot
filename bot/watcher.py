@@ -1,13 +1,14 @@
 import os
-import sys
-import time
-import subprocess
 import select
+import subprocess
+import sys
 import termios
+import time
 import tty
-from watchdog.observers import Observer
+
+from utils import debounce
 from watchdog.events import FileSystemEventHandler
-from bot.utils import debounce
+from watchdog.observers import Observer
 
 
 class ChangeHandler(FileSystemEventHandler):
@@ -33,7 +34,7 @@ def restart_process():
     if process:
         process.terminate()
         process.wait()
-    process = subprocess.Popen([sys.executable, "bot.py"])
+    process = subprocess.Popen([sys.executable, "main.py"])
     print("Process restarted.")
 
 
@@ -46,7 +47,6 @@ def check_manual_reload():
             return True
     return False
 
-
 if __name__ == "__main__":
     process = None
     restart_process()
@@ -56,23 +56,33 @@ if __name__ == "__main__":
     observer.schedule(event_handler, path=".", recursive=True)
     observer.start()
 
-    # Set terminal to raw mode
-    old_settings = termios.tcgetattr(sys.stdin)
-    try:
-        tty.setcbreak(sys.stdin.fileno())
+    if os.isatty(sys.stdin.fileno()):
+        # Terminal-specific code
+        old_settings = termios.tcgetattr(sys.stdin)
+        try:
+            tty.setcbreak(sys.stdin.fileno())
 
-        print("Watcher started. Press 'r' to manually reload.")
-        while True:
-            if check_manual_reload():
-                continue
-            time.sleep(0.1)
-    except KeyboardInterrupt:
-        print("\nStopping watcher...")
-    finally:
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-        observer.stop()
-        observer.join()
+            print("Watcher started. Press 'r' to manually reload.")
+            while True:
+                if check_manual_reload():
+                    continue
+                time.sleep(0.1)
+        except KeyboardInterrupt:
+            print("\nStopping watcher...")
+        finally:
+            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+    else:
+        # Non-terminal environment (e.g., Docker container)
+        print("Watcher started. Manual reload not available in this environment.")
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print("\nStopping watcher...")
 
-        if process:
-            process.terminate()
-            process.wait()
+    observer.stop()
+    observer.join()
+
+    if process:
+        process.terminate()
+        process.wait()
