@@ -12,6 +12,6 @@
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "node-env.d.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
