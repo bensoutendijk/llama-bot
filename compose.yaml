@@ -11,6 +11,12 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  llm:
+    image: ghcr.io/ggml-org/llama.cpp:server
+    command: ["--host", "0.0.0.0", "--port", "8080", "-n", "512"]
+    volumes:
+      - ./llm-models:/models
+
   bot:
     build: 
       dockerfile: docker/bot.dockerfile
