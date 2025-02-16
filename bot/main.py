@@ -2,6 +2,7 @@ import os
 
 import discord
 from discord.ext import commands
+from logger import logger
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -10,7 +11,7 @@ PREFIX = "!"
 
 class DiscordBot(commands.Bot):
     def __init__(self) -> None:
-        print("Initializing bot...")
+        logger.info("Initializing bot...")
         super().__init__(
             command_prefix=commands.when_mentioned_or(PREFIX),
             intents=intents,
@@ -19,8 +20,8 @@ class DiscordBot(commands.Bot):
         self.tavern = None
 
     async def setup_hook(self) -> None:
-        print("Loading extension...")
-        self.tavern = self.load_extension("tavern")
+        logger.info("Loading extension...")
+        await self.load_extension("tavern")
 
     async def on_message(self, message: discord.Message) -> None:
         if message.author == self.user or message.author.bot:

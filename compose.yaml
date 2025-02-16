@@ -14,6 +14,7 @@ services:
   bot:
     build: 
       dockerfile: docker/bot.dockerfile
+      target: dev
     environment:
       - TAVERN_BOT_TOKEN=$TAVERN_BOT_TOKEN
     volumes:
