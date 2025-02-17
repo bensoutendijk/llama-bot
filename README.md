@@ -20,5 +20,9 @@ cp .env.example .env
 ```
 
 #### Update the variables
-`TAVERN_BOT_TOKEN` Retrieve a discord bot token from https://discord.com/developers/applications
-`TAVERN_OPENAI_BASE` This should 
+- `TAVERN_BOT_TOKEN` Retrieve a discord bot token from https://discord.com/developers/applications
+- `TAVERN_OPENAI_BASE` This is the URL base for the llama.cpp server instance.
+
+## Planned Features
+- Embeddings and Context
+- Chat Templates (https://huggingface.co/docs/transformers/main/chat_templating)
