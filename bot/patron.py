@@ -93,7 +93,7 @@ class Patron:
 
         prompt = "\n".join(prompt_components)
 
-        logger.debug(f"\nSystem Prompt: {prompt}", color="green")
+        logger.debug(f"\nSystem Prompt: {prompt}")
 
         return prompt
 
