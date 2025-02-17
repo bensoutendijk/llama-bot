@@ -1,9 +1,11 @@
 import json
-from typing import List, Dict, Any
-from openai import OpenAI
-import discord
 import random
+from typing import Any, Dict, List
+
+import discord
 from discord.ext import commands
+from logger import logger
+from openai import OpenAI
 
 # Global constants for prompt components
 SYSTEM_HEADER = "<|start_header_id|>system<|end_header_id|>"
@@ -91,7 +93,7 @@ class Patron:
 
         prompt = "\n".join(prompt_components)
 
-        debug(f"\nSystem Prompt: {prompt}", color="green")
+        logger.debug(f"\nSystem Prompt: {prompt}", color="green")
 
         return prompt
 
