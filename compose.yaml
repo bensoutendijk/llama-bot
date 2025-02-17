@@ -23,12 +23,13 @@ services:
     ports:
       - "8080:8080"
     command: [
-      "-m", "/models/Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
       "--host", "0.0.0.0", 
       "--port", "8080", 
-      "-n", "512",
-      "--n-gpu-layers", "32"
     ]
+    environment:
+      - LLAMA_ARG_N_PREDICT=512
+      - LLAMA_ARG_MODEL=$LLAMA_ARG_MODEL
+      - LLAMA_ARG_N_GPU_LAYERS=$LLAMA_ARG_N_GPU_LAYERS
     volumes:
       - ./llm-models:/models
 
@@ -37,6 +38,7 @@ services:
       dockerfile: docker/bot.dockerfile
       target: dev
     environment:
+      - LOG_LEVEL=DEBUG
       - TAVERN_BOT_TOKEN=$TAVERN_BOT_TOKEN
       - TAVERN_OPENAI_BASE=$TAVERN_OPENAI_BASE
       - TAVERN_OPENAI_API_KEY=$TAVERN_OPENAI_API_KEY
